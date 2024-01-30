@@ -1,0 +1,239 @@
+<!--JSON-->
+
+{
+    "manifest_version": 3,
+    "name": "ENVIZAP",
+    "version": "1.0",
+    "author": "Rodolfo LG",
+    "description": "Iniciar conversa no WhatsApp sem ter o contato adicionado.",
+    "permissions": ["activeTab", "contextMenus", "notifications"],
+    "commands": {
+        "_execute_action": {
+            "suggested_key": {
+                "default": "Ctrl+B",
+                "mac": "Command+b"
+            }
+        }
+    },
+
+    "action": {
+        "default_popup": "popup/Popup.html", 
+        "default_title": "Aperte Ctrl(Win)/Command(Mac)+B para ativar" 
+    },
+
+    "background": {
+        "service_worker": "scripts/service-worker.js" 
+    },
+
+    "omnibox": { "keyword": "wm" },
+
+    "icons": {
+        "16": "imgs/icon16.png",
+        "32": "imgs/icon32.png",
+        "48": "imgs/icon48.png",
+        "128": "imgs/icon128.png"
+    }
+}
+
+<!--HTML-->
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta author="Maciel Oliveira">
+
+    <script src="/scripts/popup.js"></script>
+
+</head>
+<body>
+    <div class="section section-signup">
+        <div class="container">
+            <div class="row">
+                <div class=" card card-signup" data-background-color="green">
+                    <form class="form" id="dadosWhats">
+                        <select name="pais" id="pais" class="form-control">
+                            <option value="55">Brasil</option>
+                        </select>
+                        <br>
+                        <input type="text" id="ddd" placeholder="DDD" class="form-control">
+                        <br>
+                        <input type="text" id="numero" placeholder="numero" class="form-control">
+                        <br>
+                        <input type="text" id="mensagem" class="form-control">
+                        <br>
+                        <button type="submit" class="btn tn-sucess">Envia Whats</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="/script/bootstrap.js"></script>
+    <link rel="bootstrap.css" href="stylesheet">
+</body>
+</html>
+
+<!--JS-->
+//Aguarda o carregamento completo o DOM antes de executar o código
+document.addEventListener("DOMContentLoaded", function(){
+    //obtem referências dos elementos do formulário
+    let formulario = document.getElementById("dadosWhats")
+    let dddcampo = document.getElementById("ddd")
+    let numerocampo = document.getElementById("numero")
+    let mensagemcampo = document.getElementById("mensagem")
+
+    //Adiciona um ouvinte ao formulário
+    formulario.addEventListener("submit", function(event){
+        event.preventDefaul() //Evitar enviar o formulário apertando enter
+
+        //Obtem o que o usuário digitou
+        let ddd = dddcampo.value
+        let numero = numerocampo.value
+        let mensagem = mensagemcampo.value
+
+        //Cria o número de telefone no formato da API do WhatsApp
+        let numerotelefone = "55" + ddd + número
+        let mensagemcodificada = encodeURIComponent (mensagem)
+
+        let urlWhatsapp = "http://wa.me"+numerotelefone+"/?text="+mensagemcodificada
+
+        chrome.tabs.create({url:urlWhatsapp})
+    })
+})
+
+<!--CSS-->
+body {
+  min-width: 300px;
+  max-width: 350px;
+  font-size: 14px;
+  background-color: transparent;
+  border: none;
+}
+
+.btn.btn-icon {
+  height: 2.375rem;
+  min-width: 2.375rem;
+  width: 2.375rem;
+  padding: 0;
+  font-size: 0.9375rem;
+  overflow: hidden;
+  position: relative;
+  line-height: normal;
+}
+
+.btn.btn-icon.btn-lg {
+  height: 3.6rem;
+  min-width: 3.6rem;
+  width: 3.6rem;
+}
+
+.btn-round {
+  border-width: 1px;
+  border-radius: 30px !important;
+  padding: 11px 23px;
+}
+
+.input-group .form-control {
+  padding: 10px 18px 10px 18px;
+}
+
+.input-group.no-border .form-control {
+  background-color: rgba(222, 222, 222, 0.3);
+  border: medium none;
+}
+
+.input-group {
+  margin-bottom: 10px;
+  position: relative;
+}
+
+.title-up {
+  text-transform: uppercase;
+}
+
+img {
+  max-width: 100%;
+  border-radius: 1px;
+}
+
+.card {
+  border: 0;
+  display: inline-block;
+  position: relative;
+  width: 100%;
+  margin-bottom: 30px;
+  box-shadow: 0px 5px 25px 0px rgba(0, 0, 0, 0.2);
+}
+
+.card .card-header {
+  background-color: transparent;
+  border-bottom: 0;
+  background-color: transparent;
+  border-radius: 0;
+  padding: 0;
+}
+
+.card .card-footer {
+  padding: 0;
+  margin-top: 15px;
+  background-color: transparent;
+  border: 0;
+}
+
+.card[data-background-color="green"] {
+  background-color: #15b60d;
+      border: 0px;
+    border-radius: 0px;
+}
+
+.card-signup {
+  max-width: 350px;
+  margin: 0 auto;
+}
+
+.card-signup .card-header {
+  padding: 10px 0;
+}
+
+.card-signup .card-title {
+  margin-top: 15px;
+  color: white;
+  margin-bottom: 15px;
+}
+
+.card-signup .card-footer {
+  margin-bottom: 10px;
+  margin-top: 24px;
+}
+
+.card-signup .card-body {
+  padding-top: 0px;
+  padding-bottom: 0px;
+  min-height: auto;
+}
+
+.card-signup .social-line {
+  margin-top: 20px;
+  text-align: center;
+}
+
+.card-signup .social-line .btn.btn-icon,
+.card-signup .social-line .btn.btn-icon .btn-icon {
+  margin-left: 5px;
+  margin-right: 5px;
+  margin-top: 0;
+  margin-bottom: 0;
+  box-shadow: 0px 5px 50px 0px rgba(0, 0, 0, 0.2);
+}
+
+.section {
+  position: relative;
+}
+
+.section-signup {
+  padding-top: 0px;
+}
+
+<!---->
+
+
