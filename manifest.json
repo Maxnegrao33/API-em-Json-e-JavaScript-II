@@ -1,0 +1,34 @@
+{
+    "manifest_version": 3,
+    "name": "ENVIZAP",
+    "version": "1.0",
+    "author": "Rodolfo LG",
+    "description": "Iniciar conversa no WhatsApp sem ter o contato adicionado.",
+    "permissions": ["activeTab", "contextMenus", "notifications"],
+    "commands": {
+        "_execute_action": {
+            "suggested_key": {
+                "default": "Ctrl+B",
+                "mac": "Command+b"
+            }
+        }
+    },
+
+    "action": {
+        "default_popup": "popup/Popup.html", 
+        "default_title": "Aperte Ctrl(Win)/Command(Mac)+B para ativar" 
+    },
+
+    "background": {
+        "service_worker": "scripts/service-worker.js" 
+    },
+
+    "omnibox": { "keyword": "wm" },
+
+    "icons": {
+        "16": "imgs/icon16.png",
+        "32": "imgs/icon32.png",
+        "48": "imgs/icon48.png",
+        "128": "imgs/icon128.png"
+    }
+}
